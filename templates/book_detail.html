@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookVerse – {{ title }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root { --bg:#0d0f14; --surface:#161a24; --surface2:#1e2436; --accent:#6c63ff; --accent2:#ff6584; --gold:#f5c518; --text:#e8eaf0; --muted:#8892a4; --border:rgba(255,255,255,0.07); --radius:14px; --green:#22c55e; }
+        body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+        nav { position:sticky; top:0; z-index:999; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; height:64px; background:rgba(13,15,20,0.9); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+        .nav-brand { font-size:1.3rem; font-weight:800; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-decoration:none; }
+        .nav-links { display:flex; gap:.25rem; list-style:none; }
+        .nav-links a { display:block; padding:.45rem .9rem; border-radius:8px; color:var(--muted); text-decoration:none; font-size:.88rem; font-weight:500; transition:background .2s,color .2s; }
+        .nav-links a:hover { background:var(--surface2); color:var(--text); }
+
+        .container { max-width:960px; margin:3rem auto; padding:0 2rem; }
+        .back-link { color:var(--muted); text-decoration:none; font-size:.85rem; display:inline-flex; align-items:center; gap:.4rem; margin-bottom:2rem; transition:color .2s; }
+        .back-link:hover { color:var(--accent); }
+
+        .book-hero { display:flex; gap:2.5rem; align-items:flex-start; margin-bottom:3rem; }
+        .book-cover { width:200px; flex-shrink:0; border-radius:var(--radius); overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,.6); }
+        .book-cover img { width:100%; display:block; }
+        .book-info { flex:1; }
+        .book-info h1 { font-size:1.8rem; font-weight:800; line-height:1.25; margin-bottom:.5rem; }
+        .book-info .author { font-size:1rem; color:var(--muted); margin-bottom:1rem; }
+        .meta-chips { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+        .meta-chip { background:var(--surface2); border:1px solid var(--border); border-radius:999px; padding:.28rem .8rem; font-size:.78rem; color:var(--muted); }
+        .meta-chip span { color:var(--text); font-weight:500; }
+
+        .avg-display { display:flex; align-items:center; gap:.6rem; margin-bottom:1.5rem; }
+        .avg-stars { font-size:1.4rem; color:var(--gold); letter-spacing:2px; }
+        .avg-num { font-size:1.1rem; font-weight:700; }
+        .avg-cnt { color:var(--muted); font-size:.85rem; }
+
+        .rate-section h3 { font-size:.9rem; font-weight:600; color:var(--muted); margin-bottom:.6rem; text-transform:uppercase; letter-spacing:.05em; }
+        .star-row { display:flex; gap:6px; margin-bottom:.8rem; }
+        .star-btn { background:none; border:none; cursor:pointer; font-size:1.8rem; color:var(--muted); transition:color .15s, transform .1s; padding:0; line-height:1; }
+        .star-btn:hover, .star-btn.lit { color:var(--gold); }
+        .star-btn:hover { transform:scale(1.15); }
+        .comment-box { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:10px; color:var(--text); font-family:inherit; font-size:.9rem; padding:.75rem 1rem; resize:vertical; outline:none; transition:border-color .2s; margin-bottom:.7rem; }
+        .comment-box:focus { border-color:var(--accent); }
+        .submit-btn { background:linear-gradient(135deg,var(--accent),#8b7fff); color:#fff; border:none; cursor:pointer; font-size:.88rem; font-weight:600; font-family:inherit; padding:.6rem 1.4rem; border-radius:10px; transition:opacity .2s, transform .15s; }
+        .submit-btn:hover { opacity:.9; transform:scale(1.03); }
+        .feedback-ok { color:var(--green); font-size:.85rem; margin-top:.5rem; display:none; }
+
+        .reviews-section { margin-top:2rem; }
+        .reviews-section h2 { font-size:1.1rem; font-weight:700; margin-bottom:1rem; padding-bottom:.6rem; border-bottom:1px solid var(--border); }
+        .review-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1rem 1.2rem; margin-bottom:.8rem; }
+        .review-stars { color:var(--gold); font-size:1rem; margin-bottom:.4rem; }
+        .review-comment { font-size:.88rem; color:var(--text); margin-bottom:.4rem; }
+        .review-date { font-size:.75rem; color:var(--muted); }
+        .no-reviews { color:var(--muted); font-size:.9rem; padding:1.5rem 0; }
+
+        footer { text-align:center; padding:2rem; color:var(--muted); font-size:.8rem; border-top:1px solid var(--border); margin-top:3rem; }
+
+        @media(max-width:600px) { .book-hero { flex-direction:column; } .book-cover { width:140px; } }
+    </style>
+</head>
+<body>
+<nav>
+    <a class="nav-brand" href="/">📚 BookVerse</a>
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/recommend">Recommend</a></li>
+        <li><a href="/history">History</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <a href="javascript:history.back()" class="back-link">← Back</a>
+
+    <div class="book-hero">
+        <div class="book-cover">
+            {% if book and book['image_m'] %}
+            <img src="{{ book['image_m'] }}" alt="{{ title }}"
+                 onerror="this.src='https://via.placeholder.com/200x300/1e2436/6c63ff?text=No+Cover'">
+            {% else %}
+            <img src="https://via.placeholder.com/200x300/1e2436/6c63ff?text=No+Cover" alt="{{ title }}">
+            {% endif %}
+        </div>
+        <div class="book-info">
+            <h1>{{ title }}</h1>
+            {% if book %}
+            <div class="author">by {{ book['author'] }}</div>
+            <div class="meta-chips">
+                {% if book['year'] and book['year'] != '0' %}<div class="meta-chip">📅 <span>{{ book['year'] }}</span></div>{% endif %}
+                {% if book['publisher'] %}<div class="meta-chip">🏢 <span>{{ book['publisher'] }}</span></div>{% endif %}
+                {% if book['isbn'] %}<div class="meta-chip">ISBN <span>{{ book['isbn'] }}</span></div>{% endif %}
+            </div>
+            {% endif %}
+
+            {% if avg_rating %}
+            <div class="avg-display">
+                <span class="avg-stars">{% for i in range(avg_rating|int) %}★{% endfor %}{% if avg_rating % 1 >= 0.5 %}½{% endif %}</span>
+                <span class="avg-num">{{ avg_rating }}</span>
+                <span class="avg-cnt">/ 5 &nbsp;·&nbsp; {{ rating_count }} rating{{ 's' if rating_count != 1 }}</span>
+            </div>
+            {% endif %}
+
+            <!-- Rate this book -->
+            <div class="rate-section">
+                <h3>Rate this book</h3>
+                <div class="star-row" id="starRow">
+                    {% for s in [1,2,3,4,5] %}
+                    <button class="star-btn" data-star="{{ s }}">★</button>
+                    {% endfor %}
+                </div>
+                <textarea class="comment-box" id="commentBox" rows="3" placeholder="Leave a comment (optional)…"></textarea>
+                <button class="submit-btn" id="submitRating">Submit Rating</button>
+                <div class="feedback-ok" id="feedbackOk">✓ Thank you for your rating!</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="reviews-section">
+        <h2>Reader Reviews ({{ feedback | length }})</h2>
+        {% if feedback %}
+        {% for f in feedback %}
+        <div class="review-card">
+            <div class="review-stars">{{ '★' * f['stars'] }}{{ '☆' * (5 - f['stars']) }}</div>
+            {% if f['comment'] %}<div class="review-comment">{{ f['comment'] }}</div>{% endif %}
+            <div class="review-date">{{ f['created_at'] }}</div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="no-reviews">No reviews yet. Be the first to rate this book!</div>
+        {% endif %}
+    </div>
+</div>
+
+<footer>&copy; 2024 BookVerse — Book Recommender System</footer>
+
+<script>
+const starBtns = document.querySelectorAll('#starRow .star-btn');
+let selectedStars = 0;
+
+starBtns.forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+        const s = +btn.dataset.star;
+        starBtns.forEach(b => b.classList.toggle('lit', +b.dataset.star <= s));
+    });
+    btn.addEventListener('mouseleave', () => {
+        starBtns.forEach(b => b.classList.toggle('lit', +b.dataset.star <= selectedStars));
+    });
+    btn.addEventListener('click', () => {
+        selectedStars = +btn.dataset.star;
+        starBtns.forEach(b => b.classList.toggle('lit', +b.dataset.star <= selectedStars));
+    });
+});
+
+document.getElementById('submitRating').addEventListener('click', () => {
+    if (!selectedStars) { alert('Please select a star rating first.'); return; }
+    const fd = new FormData();
+    fd.append('book_title', {{ title | tojson }});
+    fd.append('stars', selectedStars);
+    fd.append('comment', document.getElementById('commentBox').value.trim());
+    fetch('/feedback', { method:'POST', body:fd, headers:{'X-Requested-With':'XMLHttpRequest'} })
+    .then(r => r.json()).then(res => {
+        if (res.success) {
+            document.getElementById('submitRating').disabled = true;
+            document.getElementById('feedbackOk').style.display = 'block';
+        }
+    });
+});
+</script>
+</body>
+</html>
